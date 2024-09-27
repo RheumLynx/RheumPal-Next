@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagnóstico Diferencial Reumatológico</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Diagnóstico Diferencial Reumatológico</h1>
+    <form id="diagnosticoForm">
+        <label for="pcr">PCR (mg/L):</label>
+        <input type="number" id="pcr" step="0.1" required>
+
+        <label for="vsg">VSG (mm/h):</label>
+        <input type="number" id="vsg" required>
+
+        <label for="ana">Título de ANA:</label>
+        <select id="ana" required>
+            <option value="">Seleccione</option>
+            <option value="1/40">1/40</option>
+            <option value="1/80">1/80</option>
+            <option value="1/160">1/160</option>
+            <option value="1/320">1/320</option>
+            <option value="1/640">1/640</option>
+            <option value="1/1280">1/1280</option>
+            <option value="1/2560">1/2560</option>
+            <option value="1/5120">1/5120</option>
+        </select>
+
+        <label for="fr">Factor Reumatoide (UI/mL):</label>
+        <input type="number" id="fr" step="0.1" required>
+
+        <label for="sintomas">
+            <input type="checkbox" id="sintomas">
+            El paciente presenta síntomas de enfermedad reumatológica
+        </label>
+
+        <label for="patronANA">Patrón ANA:</label>
+        <select id="patronANA" required>
+            <option value="">Seleccione</option>
+            <option value="AC-1">AC-1: Nuclear homogéneo (difuso)</option>
+            <option value="AC-2">AC-2: Nuclear (nuclear punteado fino denso)</option>
+            <option value="AC-3">AC-3: Centrómero (cinetocoro)</option>
+            <option value="AC-4">AC-4: Nuclear granular fino (nuclear punteado fino)</option>
+            <option value="AC-5">AC-5: Nuclear granular grueso/grande (espliceosoma, matriz nuclear)</option>
+            <option value="AC-6">AC-6: Gránulos nucleares múltiples</option>
+            <option value="AC-7">AC-7: Gránulos nucleares escasos (cuerpos de Cajal)</option>
+            <option value="AC-8">AC-8: Nucleolar homogéneo</option>
+            <option value="AC-9">AC-9: Nucleolar grumoso</option>
+            <option value="AC-10">AC-10: Nucleolar granular</option>
+            <option value="AC-11">AC-11: Membrana nuclear lisa</option>
+            <option value="AC-12">AC-12: Membrana nuclear granular</option>
+            <option value="AC-13">AC-13: Parecido a PCNA</option>
+            <option value="AC-14">AC-14: Parecido a CENP-F (MSA-3, NSp-II)</option>
+            <option value="AC-15">AC-15: Citoplasmático fibrilar linear</option>
+            <option value="AC-16">AC-16: Citoplasmático fibrilar filamentar</option>
+            <option value="AC-17">AC-17: Citoplasmático fibrilar segmentado</option>
+            <option value="AC-18">AC-18: Citoplasmático granular discreto /parecido a cuerpos GW</option>
+            <option value="AC-19">AC-19: Citoplasmático granular fino denso (homogeneo)</option>
+            <option value="AC-20">AC-20: Citoplasmático granular fino (punteado)</option>
+            <option value="AC-21">AC-21: Citoplasmático reticular /AAM (parecido a mitocondrial)</option>
+            <option value="AC-22">AC-22: Citoplasmatico granular Polar/parecido a aparato de Golgi</option>
+            <option value="AC-23">AC-23: Bastones y anillos</option>
+            <option value="AC-24">AC-24: Centrosoma (centriolos)</option>
+            <option value="AC-25">AC-25: Huso mitótico</option>
+            <option value="AC-26">AC-26: Parecido a NuMA</option>
+            <option value="AC-27">AC-27: Puente intercelular (cuerpo medio)</option>
+            <option value="AC-28">AC-28: Envoltura cromosómica mitótica</option>
+        </select>
+
+        <button type="submit">Analizar</button>
+    </form>
+
+    <div id="resultado"></div>
+
+    <script>
+        const patronesANA = {
+            "AC-1": {
+                antigenos: "DsDNA, nucleosoma, histonas",
+                enfermedades: "LES, lupus por fármacos, artritis idiopatica juvenil"
+            },
+            "AC-2": {
+                antigenos: "DFS70/LEDGF",
+                enfermedades: "Raro en Sjogren (Sj), LES, y Esclerosis sistemica (ES)"
+            },
+            "AC-3": {
+                antigenos: "CENP-A/B (c)",
+                enfermedades: "CBP, ES cutanea limitada"
+            },
+            "AC-4": {
+                antigenos: "Ro, La, Mi2, TIF1gamma, TIF1beta, Ku",
+                enfermedades: "Sj, LES, dermatomiositis"
+            },
+            "AC-5": {
+                antigenos: "hnRNP, U1RNP, Sm, ARN polimerasa III",
+                enfermedades: "EMTC. LES, ES"
+            },
+            "AC-6": {
+                antigenos: "Sp-100, proteínas PML, MJ/NXP-2",
+                enfermedades: "CBP, EAS, dermatomiositis"
+            },
+            "AC-7": {
+                antigenos: "P80-coilina, SMN",
+                enfermedades: "SSj, LES, ES, PM, individuos asintomáticos"
+            },
+            "AC-8": {
+                antigenos: "PM/Scl-75, PM/Scl-100, Th/To, B23/nucleofosmina, nucleolina, No55/SC65",
+                enfermedades: "ES, ES/PM overlap"
+            },
+            "AC-9": {
+                antigenos: "U3snoRNP/fibrilarina",
+                enfermedades: "ES"
+            },
+            "AC-10": {
+                antigenos: "ARN polimerasa I, hUBF/NOR-90",
+                enfermedades: "ES, SSj"
+            },
+            "AC-11": {
+                antigenos: "Láminas A,B,C, o proteínas asociadas con las láminas",
+                enfermedades: "LES, SSj, artritis seronegativa"
+            },
+            "AC-12": {
+                antigenos: "Complejo de proteínas de los poros nucleares. Ej. gp210",
+                enfermedades: "CPB"
+            },
+            "AC-13": {
+                antigenos: "Antígeno nuclear de células proliferativas",
+                enfermedades: "LES, otras enfermedades"
+            },
+            "AC-14": {
+                antigenos: "Proteína del centrómero F (CENP-F)",
+                enfermedades: "Cáncer, otras enfermedades"
+            },
+            "AC-15": {
+                antigenos: "Actina, miosina no muscular",
+                enfermedades: "Enfermedad mixta del tejido conjuntivo, hepatitis crónica activa, miastenia gravis, enfermedad de Crohn, CBP, hemodiálisis de largo plazo, raro en EAS"
+            },
+            "AC-16": {
+                antigenos: "Vimentina, citoqueratina, tropomiosina",
+                enfermedades: "Enfermedades infecciosas o inflamatorias, hemodiálisis de largo plazo, enfermedad hepática por alcohol, EAS, Psoriasis y sujetos sanos"
+            },
+            "AC-17": {
+                antigenos: "Actina alfa, vinculina",
+                enfermedades: "Miastenia gravis, enfermedad de Crohn, colitis ulserosa"
+            },
+            "AC-18": {
+                antigenos: "GW182, Su/Ago2",
+                enfermedades: "CBP, EAS, enfermedades neurológicas y autoinmunes"
+            },
+            "AC-19": {
+                antigenos: "PL-7, PL-12, Proteína P ribosomal",
+                enfermedades: "Síndrome antisintetasa, PM/DM, LES, LES juvenil LES neuropsiquiátrico"
+            },
+            "AC-20": {
+                antigenos: "Jo-1/ sintetasa del Histidil del ARNt",
+                enfermedades: "Síndrome antisintetasa, PM/DM, ES limitada, derrame pleural idiopático"
+            },
+            "AC-21": {
+                antigenos: "PDC-E2/M2, BCOADC-E2, OGDC-E2, subunidad E1alfa de PDC, E3BP/proteína X",
+                enfermedades: "Común en CBP, ES generalizada, raro en otras EAS"
+            },
+            "AC-22": {
+                antigenos: "Giantina/macrogolgina, golgin-95/GM130, Golgina-160, golgina-97, golgina 245",
+                enfermedades: "Raro en SSj, LES, AR, EMTC, PAG, Ataxia cerebelar idiopática, degeneración cerebelar paraneoplasica, infecciones virales"
+            },
+            "AC-23": {
+                antigenos: "IMPDH2",
+                enfermedades: "Algunos pacientes infectados por VHC tras tratamiento con IFN/ribavirina; raro en LES, Hashimoto y controles sanos"
+            },
+            "AC-24": {
+                antigenos: "Pericentrina, nineína, Cep250, Cep110",
+                enfermedades: "Raro en ES, fenómeno de Raynaud, infecciones (virales y por micoplasmas)"
+            },
+            "AC-25": {
+                antigenos: "HsEg5",
+                enfermedades: "Raro en SSj.., LES, otras conectivopatías"
+            },
+            "AC-26": {
+                antigenos: "NuMA",
+                enfermedades: "SSj, LES, otros"
+            },
+            "AC-27": {
+                antigenos: "-",
+                enfermedades: "Raro en ES, fenómeno de Raynaud, tumores malignos"
+            },
+            "AC-28": {
+                antigenos: "Histona H3 modificada, MCA-1",
+                enfermedades: "Raro en lúpus discoide (LED), leucemia linfocítica crónica (LLC), SSj y polimialgia reumática"
+            }
+        };
+
+        document.getElementById('diagnosticoForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const pcr = parseFloat(document.getElementById('pcr').value);
+            const vsg = parseInt(document.getElementById('vsg').value);
+            const ana = document.getElementById('ana').value;
+            const fr = parseFloat(document.getElementById('fr').value);
+            const sintomas = document.getElementById('sintomas').checked;
+            const patronANA = document.getElementById('patronANA').value;
+
+            let mensaje = "";
+
+            if (pcr > 5 || vsg > 20 || ana !== "1/40" || fr > 14 || sintomas) {
+                mensaje += "<p>Se recomienda derivar al paciente a reumatología para una evaluación más detallada.</p>";
+            } else {
+                mensaje += "<p>Los valores están dentro de los rangos normales y no hay síntomas de enfermedad reumatológica. No se requiere derivación a reumatología en este momento.</p>";
+            }
+
+            if (patronANA) {
+                const patron = patronesANA[patronANA];
+                mensaje += `<h3>Información sobre el patrón ANA seleccionado:</h3>
+                            <p><strong>Patrón:</strong> ${patronANA}</p>
+                            <p><strong>Antígenos asociados:</strong> ${patron.antigenos}</p>
+                            <p><strong>Enfermedades a descartar:</strong> ${patron.enfermedades}</p>`;
+            }
+
+            document.getElementById('resultado').innerHTML = mensaje;
+        });
+    </script>
+</body>
+</html>
